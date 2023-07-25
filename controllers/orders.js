@@ -27,6 +27,9 @@ export const addOrder = async (req, res) => {
           orderItems: req.body.orderItems,
           orderDate: req.body.orderDate,
           orderInstructions: req.body.orderInstructions,
+          orderStatus: req.body.orderStatus,
+          orderType: req.body.type,
+          payment: req.body.payment,
           deliveryLocation: req.body.DeliveryLocation
         };
               await collection.insertOne(order);
@@ -34,5 +37,5 @@ export const addOrder = async (req, res) => {
       } catch (error) {
           console.error("Error executing query:", error);
           return res.status(500).json(error);
-      }
+      } 
   };
