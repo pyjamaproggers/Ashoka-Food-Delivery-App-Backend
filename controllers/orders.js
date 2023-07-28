@@ -39,3 +39,31 @@ export const addOrder = async (req, res) => {
           return res.status(500).json(error);
       } 
   };
+
+  export const updateOrderStatus = async (req, res) => {
+    try {
+      const orderId = req.params.orderId; // Assuming we pass the order ID in the URL
+      const newStatus = req.body.status; // Assuming we pass the new status in the request body
+  
+      if (!orderId || !newStatus) {
+        return res.status(400).json({ message: "Order ID and status are required." });
+      }
+  
+      const collection = client.db("AshokaEats").collection("orders");
+  
+      const result = await collection.updateOne(
+        { _id: orderId },
+        { $set: { orderStatus: newStatus } }
+      );
+  
+      if (result.modifiedCount === 1) {
+        return res.json("Order status has been updated.");
+      } else {
+        return res.status(404).json({ message: "Order not found." });
+      }
+    } catch (error) {
+      console.error("Error executing query:", error);
+      return res.status(500).json(error);
+    }
+  };
+  

@@ -2,6 +2,7 @@ import express from "express";
 import {
   addOrder,
   getOrders,
+  updateOrderStatus
 } from "../controllers/orders.js";
 
 const router = express.Router();
@@ -19,5 +20,14 @@ router.post("/", (req, res, next) => {
 //   res.set("Access-Control-Allow-Credentials", "true");
   next();
 }, addOrder);
+
+router.put("/orders/:orderId/status", (req, res, next) => {
+  // Set CORS headers
+//   res.set("Access-Control-Allow-Origin", "https://appurl"); 
+//   res.set("Access-Control-Allow-Credentials", "true");
+  next();
+}, updateOrderStatus);
+
+
 
 export default router;
