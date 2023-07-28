@@ -1,4 +1,5 @@
 import client  from "../db.js";
+import { ObjectId } from "mongodb";
 
 export const getOrders = async (req, res) => {
     try {
@@ -44,6 +45,7 @@ export const addOrder = async (req, res) => {
     try {
       const orderId = req.params.orderId; // Assuming we pass the order ID in the URL
       const newStatus = req.body.status; // Assuming we pass the new status in the request body
+      console.log("Update status req")
   
       if (!orderId || !newStatus) {
         return res.status(400).json({ message: "Order ID and status are required." });
@@ -51,8 +53,11 @@ export const addOrder = async (req, res) => {
   
       const collection = client.db("AshokaEats").collection("orders");
   
+      // Convert the raw string orderId to ObjectId
+      const objectIdOrderId = new ObjectId(orderId); // Add 'new' keyword here
+  
       const result = await collection.updateOne(
-        { _id: orderId },
+        { _id: objectIdOrderId },
         { $set: { orderStatus: newStatus } }
       );
   
@@ -66,4 +71,3 @@ export const addOrder = async (req, res) => {
       return res.status(500).json(error);
     }
   };
-  

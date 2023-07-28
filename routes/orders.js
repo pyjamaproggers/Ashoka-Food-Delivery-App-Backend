@@ -21,7 +21,7 @@ router.post("/", (req, res, next) => {
   next();
 }, addOrder);
 
-router.put("/orders/:orderId/status", (req, res, next) => {
+router.put("/:orderId/status", (req, res, next) => {
   // Set CORS headers
 //   res.set("Access-Control-Allow-Origin", "https://appurl"); 
 //   res.set("Access-Control-Allow-Credentials", "true");
