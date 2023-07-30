@@ -28,6 +28,4 @@ router.put("/:orderId/status", (req, res, next) => {
   next();
 }, updateOrderStatus);
 
-
-
 export default router;
