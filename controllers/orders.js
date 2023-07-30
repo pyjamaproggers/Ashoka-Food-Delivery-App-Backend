@@ -1,5 +1,6 @@
 import client from "../db.js";
 import { ObjectId } from "mongodb";
+import { io } from "../index.js";
 
 export const getOrders = async (req, res) => {
     try {
@@ -34,6 +35,8 @@ export const addOrder = async (req, res) => {
             deliveryLocation: req.body.DeliveryLocation
         };
         await collection.insertOne(order);
+        io.emit("newOrder", order);
+        console.log("Emitted New Order")
         return res.json("Order has been created.");
     } catch (error) {
         console.error("Error executing query:", error);
