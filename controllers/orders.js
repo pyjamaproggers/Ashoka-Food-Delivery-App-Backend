@@ -32,7 +32,7 @@ export const addOrder = async (req, res) => {
             orderStatus: req.body.orderStatus,
             orderType: req.body.type,
             payment: req.body.payment,
-            deliveryLocation: req.body.DeliveryLocation
+            deliveryLocation: req.body.deliveryLocation
         };
         await collection.insertOne(order);
         io.emit("newOrder", order);
