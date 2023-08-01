@@ -48,7 +48,7 @@ export const updateOrderStatus = async (req, res) => {
     try {
         const orderId = req.params.orderId;
         const newStatus = req.body.status;
-
+        
         if (!orderId || !newStatus) {
             return res.status(400).json({ message: "Order ID and status are required." });
         }
@@ -66,6 +66,11 @@ export const updateOrderStatus = async (req, res) => {
 
         if (updatedOrder.value) {
             io.emit("orderStatusChange", updatedOrder.value);
+            if(newStatus=="completed")
+            {
+                console.log("Emitting Completed Order")
+                io.emit("orderComplete", updatedOrder.value)
+            }
             return res.json({ message: `Order status has been updated: Order ID: ${objectIdOrderId}`, order: updatedOrder.value });
         } else {
             return res.status(404).json({ message: `Order not found: ${objectIdOrderId}` });
