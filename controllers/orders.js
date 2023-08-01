@@ -4,9 +4,9 @@ import { io } from "../index.js";
 
 export const getOrders = async (req, res) => {
     try {
-        const Restaurant = req.params.Restaurant;
+        const param = req.params.param;
         const collection = client.db("AshokaEats").collection("orders");
-        const query = Restaurant ? { Restaurant } : {};
+        const query = param ? { param } : {};
 
         const data = await collection.find(query).toArray();
         return res.status(200).json(data);
@@ -46,9 +46,8 @@ export const addOrder = async (req, res) => {
 
 export const updateOrderStatus = async (req, res) => {
     try {
-        const orderId = req.params.orderId; // Assuming we pass the order ID in the URL
-        const newStatus = req.body.status; // Assuming we pass the new status in the request body
-        console.log("Update status req")
+        const orderId = req.params.orderId;
+        const newStatus = req.body.status;
 
         if (!orderId || !newStatus) {
             return res.status(400).json({ message: "Order ID and status are required." });
@@ -56,18 +55,20 @@ export const updateOrderStatus = async (req, res) => {
 
         const collection = client.db("AshokaEats").collection("orders");
 
-        // Convert the raw string orderId to ObjectId
-        const objectIdOrderId = new ObjectId(orderId); // Add 'new' keyword here
+        const objectIdOrderId = new ObjectId(orderId);
 
-        const result = await collection.updateOne(
+        // Fetch the updated order from the database after the update
+        const updatedOrder = await collection.findOneAndUpdate(
             { _id: objectIdOrderId },
-            { $set: { orderStatus: newStatus } }
+            { $set: { orderStatus: newStatus } },
+            { returnOriginal: false } // This option ensures that the updated document is returned
         );
 
-        if (result.modifiedCount === 1) {
-            return res.json("Order status has been updated.");
+        if (updatedOrder.value) {
+            io.emit("orderStatusChange", updatedOrder.value);
+            return res.json({ message: `Order status has been updated: Order ID: ${objectIdOrderId}`, order: updatedOrder.value });
         } else {
-            return res.status(404).json({ message: "Order not found." });
+            return res.status(404).json({ message: `Order not found: ${objectIdOrderId}` });
         }
     } catch (error) {
         console.error("Error executing query:", error);
