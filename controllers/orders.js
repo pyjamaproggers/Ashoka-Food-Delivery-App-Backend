@@ -2,11 +2,27 @@ import client from "../db.js";
 import { ObjectId } from "mongodb";
 import { io } from "../index.js";
 
-export const getOrders = async (req, res) => {
+export const getOrdersForUser = async (req, res) => {
     try {
-        const param = req.params.param;
+        const param = req.params.Param;
+        console.log(param)
         const collection = client.db("AshokaEats").collection("orders");
-        const query = param ? { param } : {};
+        const query = param ? { name : param } : {};
+
+        const data = await collection.find(query).toArray();
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error("Error executing query:", error);
+        return res.status(500).json(error);
+    }
+};
+
+export const getOrdersForRestaurant = async (req, res) => {
+    try {
+        const param = req.params.Param;
+        console.log(param)
+        const collection = client.db("AshokaEats").collection("orders");
+        const query = param ? { Restaurant : param } : {};
 
         const data = await collection.find(query).toArray();
         return res.status(200).json(data);
