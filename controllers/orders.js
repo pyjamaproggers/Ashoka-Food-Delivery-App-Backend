@@ -5,9 +5,8 @@ import { io } from "../index.js";
 export const getOrdersForUser = async (req, res) => {
     try {
         const param = req.params.Param;
-        console.log(param)
         const collection = client.db("AshokaEats").collection("orders");
-        const query = param ? { name : param } : {};
+        const query = param ? { email : param } : {};
 
         const data = await collection.find(query).toArray();
         return res.status(200).json(data);
@@ -20,7 +19,6 @@ export const getOrdersForUser = async (req, res) => {
 export const getOrdersForRestaurant = async (req, res) => {
     try {
         const param = req.params.Param;
-        console.log(param)
         const collection = client.db("AshokaEats").collection("orders");
         const query = param ? { Restaurant : param } : {};
 
