@@ -85,6 +85,10 @@ export const updateOrderStatus = async (req, res) => {
                 console.log("Emitting Completed Order")
                 io.emit("orderComplete", updatedOrder.value)
             }
+            if(newStatus=='out for delivery')
+            {
+                io.emit("orderOutForDelivery", updatedOrder.value)
+            }
             return res.json({ message: `Order status has been updated: Order ID: ${objectIdOrderId}`, order: updatedOrder.value });
         } else {
             return res.status(404).json({ message: `Order not found: ${objectIdOrderId}` });
