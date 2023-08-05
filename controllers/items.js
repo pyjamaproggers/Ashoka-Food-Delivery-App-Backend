@@ -1,5 +1,6 @@
 import client from "../db.js";
 import { ObjectId } from "mongodb";
+import { io } from "../index.js";
 
 export const addUnavailableItem = async (req,res) => {
     console.log('Adding unavailable item')
@@ -10,6 +11,8 @@ export const addUnavailableItem = async (req,res) => {
             restaurant: req.body.restaurant
         }
         await collection.insertOne(item)
+        io.emit("unavailableItemsListUpdated", item);
+        console.log("Emitted Unavailable Items List Updated")
         return res.json("Unavailable item inserted")
     } catch (error) {
         console.error('Unable to add unavailable item')
@@ -26,6 +29,8 @@ export const deleteUnavailableItem = async (req,res) => {
             restaurant: req.body.restaurant
         }
         await collection.deleteOne(item)
+        io.emit("unavailableItemsListUpdated", item);
+        console.log("Emitted Unavailable Items List Updated")
         return res.json("Unavailable item deleted")
     } catch (error) {
         console.error('Unable to add unavailable item')
