@@ -13,7 +13,8 @@ export const passwordAuth = async (req, res) => {
         }
 
         const passwordMatch = data.password === givenPassword;
-
+        console.log(data.password)
+        console.log(givenPassword)
         return res.status(200).json({ verified: passwordMatch });
 
     } catch (error) {
