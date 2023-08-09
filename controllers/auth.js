@@ -3,21 +3,21 @@ import client from "../db.js";
 export const passwordAuth = async (req, res) => {
     try {
         const restaurant = req.params.restaurant;
-        const givenPassword = req.body.password
+        const givenPassword = req.body.password;
         const collection = client.db("AshokaEats").collection("vendorpasswords");
-        const query = restaurant ? { Restaurant : restaurant } : {};
-        const data = await collection.findOne(query)
-        if(data.password===givenPassword)
-        {
-            return res.status(200);
+        const query = restaurant ? { Restaurant: restaurant } : {};
+        const data = await collection.findOne(query);
+
+        if (!data) {
+            return res.status(401).json({ verified: false }); // Restaurant not found
         }
-        else
-        {
-            return res.status(401);
-        }
-        
+
+        const passwordMatch = data.password === givenPassword;
+
+        return res.status(passwordMatch ? 200 : 401).json({ verified: passwordMatch });
+
     } catch (error) {
         console.error("Error executing query:", error);
-        return res.status(500).json(error);
+        return res.status(500).json({ verified: false, error: "Internal server error." });
     }
 };
