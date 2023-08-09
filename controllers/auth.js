@@ -14,7 +14,7 @@ export const passwordAuth = async (req, res) => {
 
         const passwordMatch = data.password === givenPassword;
 
-        return res.status(passwordMatch ? 200 : 401).json({ verified: passwordMatch });
+        return res.status(200).json({ verified: passwordMatch });
 
     } catch (error) {
         console.error("Error executing query:", error);
