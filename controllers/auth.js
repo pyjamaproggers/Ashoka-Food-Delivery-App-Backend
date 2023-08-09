@@ -7,7 +7,8 @@ export const passwordAuth = async (req, res) => {
         const collection = client.db("AshokaEats").collection("vendorpasswords");
         const query = restaurant ? { Restaurant: restaurant } : {};
         const data = await collection.findOne(query);
-
+        console.log(data)
+        console.log(restaurant)
         if (!data) {
             return res.status(401).json({ verified: false }); // Restaurant not found
         }
