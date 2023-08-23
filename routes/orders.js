@@ -16,9 +16,8 @@ router.get("/restaurants/:Param", (req, res, next) => {
 }, getOrdersForRestaurant);
 
 router.get("/users/:Param", (req, res, next) => {
-  // Set CORS headers
-//   res.set("Access-Control-Allow-Origin", "https://appurl"); 
-//   res.set("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Allow-Origin", "http://10.2.32.254:8081"); 
+  res.set("Access-Control-Allow-Credentials", "true");
   next();
 }, getOrdersForUser);
 
